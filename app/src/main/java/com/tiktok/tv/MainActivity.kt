@@ -999,11 +999,41 @@ class MainActivity : AppCompatActivity() {
               }
 
               ensureStyle();
-              // TikTok is a single-page app; re-check occasionally in case
-              // the <head> is ever rebuilt. Cheap: only touches the DOM
-              // when the style tag is actually missing.
-              new MutationObserver(ensureStyle)
-                  .observe(document.documentElement, {childList: true, subtree: false});
+
+              // Hide TikTok's cookie-consent prompt, including localized
+              // versions such as the Turkish "çerezlere izin verilsin mi?"
+              // prompt. Do not hide unrelated dialogs.
+              function hideCookieConsent() {
+                const markers = [
+                  'çerezlere izin verilsin mi',
+                  'cookies from tiktok',
+                  'allow cookies',
+                  'cookie consent'
+                ];
+                const candidates = document.querySelectorAll(
+                  '[role="dialog"], [aria-modal="true"], [id*="cookie" i], ' +
+                  '[class*="cookie" i], [data-e2e*="cookie" i]'
+                );
+                for (const el of candidates) {
+                  const text = (el.innerText || el.textContent || '')
+                    .replace(/\\s+/g, ' ').trim().toLowerCase();
+                  if (text && markers.some(marker => text.includes(marker))) {
+                    el.style.setProperty('display', 'none', 'important');
+                    el.setAttribute('aria-hidden', 'true');
+                  }
+                }
+              }
+
+              hideCookieConsent();
+              // TikTok is a single-page app; keep the style and consent
+              // prompt cleanup active when the page updates dynamically.
+              const observer = new MutationObserver(() => {
+                ensureStyle();
+                hideCookieConsent();
+              });
+              observer.observe(document.documentElement, {
+                childList: true, subtree: true, attributes: true
+              });
             })();
         """.trimIndent()
         webView.evaluateJavascript(js, null)
