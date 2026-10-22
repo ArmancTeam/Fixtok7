@@ -1,41 +1,50 @@
 name: Build FixTok
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+push:
+branches:
+- main
+workflow_dispatch:
 
 permissions:
-  contents: read
+contents: read
 
 jobs:
-  build:
-    name: Build APK
-    runs-on: ubuntu-latest
+build:
+name: Build APK
+runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+steps:
+  - name: Checkout
+    uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
+  - name: Set up JDK 17
+    uses: actions/setup-java@v4
+    with:
+      distribution: temurin
+      java-version: '17'
 
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+  - name: Set up Gradle
+    uses: gradle/actions/setup-gradle@v4
 
-      - name: Make Gradle executable
-        run: chmod +x ./gradlew
+  - name: Make Gradle executable
+    run: chmod +x ./gradlew
 
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug
+  - name: Build Debug APK
+    run: ./gradlew assembleDebug --stacktrace --warning-mode all
 
-      - name: Upload FixTok APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: FixTok-debug
-          path: app/build/outputs/apk/debug/*.apk
-          if-no-files-found: error
+  - name: Show build outputs on failure
+    if: failure()
+    run: |
+      echo "=== Gradle build diagnostics ==="
+      find app/build/outputs -maxdepth 5 -type f 2>/dev/null || true
+      echo "=== Recent Gradle reports ==="
+      find . -path '*/build/reports/*' -type f 2>/dev/null || true
+
+  - name: Upload FixTok APK
+    if: success()
+    uses: actions/upload-artifact@v4
+    with:
+      name: FixTok-debug
+      path: app/build/outputs/apk/debug/*.apk
+      if-no-files-found: error
