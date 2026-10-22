@@ -43,6 +43,112 @@
             android:textColor="@color/fixtok_text"
             android:textSize="16sp" />
 
+        <Switch
+            android:id="@+id/settingsMaterialYou"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/focusable_bg"
+            android:focusable="true"
+            android:padding="16dp"
+            android:text="@string/settings_material_you"
+            android:textColor="@color/fixtok_text"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/settings_accent_color"
+            android:textColor="@color/fixtok_text"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/settingsAccentColor"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/focusable_bg"
+            android:focusable="true" />
+
+        <!-- GUIDE / WEB VIEW -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:letterSpacing="0.1"
+            android:text="@string/settings_section_guide"
+            android:textColor="@color/fixtok_text_dimmer"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/settings_guide_mode"
+            android:textColor="@color/fixtok_text"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/settingsGuideMode"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/focusable_bg"
+            android:focusable="true" />
+
+        <!-- VIDEO QUALITY / DOWNLOAD PREFERENCES -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:letterSpacing="0.1"
+            android:text="@string/settings_section_video"
+            android:textColor="@color/fixtok_text_dimmer"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/settings_video_quality"
+            android:textColor="@color/fixtok_text"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/settingsVideoQuality"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/focusable_bg"
+            android:focusable="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="@string/settings_video_download"
+            android:textColor="@color/fixtok_text"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/settingsVideoDownload"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/focusable_bg"
+            android:focusable="true" />
+
+        <TextView
+            android:id="@+id/settingsEmptyCache"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/focusable_bg"
+            android:focusable="true"
+            android:padding="18dp"
+            android:text="@string/settings_empty_cache"
+            android:textColor="@color/fixtok_text"
+            android:textSize="16sp" />
+
         <!-- SOUND -->
         <TextView
             android:layout_width="wrap_content"
@@ -68,6 +174,18 @@
             android:text="@string/settings_bass"
             android:textColor="@color/fixtok_text"
             android:textSize="18sp" />
+
+        <Switch
+            android:id="@+id/settingsAdvancedAudio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/focusable_bg"
+            android:focusable="true"
+            android:padding="16dp"
+            android:text="@string/settings_advanced_audio"
+            android:textColor="@color/fixtok_text"
+            android:textSize="16sp" />
 
         <!-- D-PAD MOUSE -->
         <TextView
@@ -150,6 +268,18 @@
             android:background="@drawable/bg_card"
             android:contentDescription="@string/settings_cursor_preview"
             android:padding="8dp" />
+
+        <Switch
+            android:id="@+id/settingsCursorPrecision"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/focusable_bg"
+            android:focusable="true"
+            android:padding="16dp"
+            android:text="@string/settings_cursor_precision"
+            android:textColor="@color/fixtok_text"
+            android:textSize="16sp" />
 
         <Switch
             android:id="@+id/settingsMouseEnabled"

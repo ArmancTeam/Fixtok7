@@ -30,6 +30,13 @@ class SettingsActivity : AppCompatActivity() {
         const val KEY_CLEAN_SCREEN = "clean_screen"
         const val KEY_AMOLED = "amoled_enabled"
         const val KEY_CURSOR_SIZE = "cursor_size"
+        const val KEY_GUIDE_MODE = "guide_mode"
+        const val KEY_ADVANCED_AUDIO = "advanced_audio"
+        const val KEY_CURSOR_PRECISION = "cursor_precision"
+        const val KEY_MATERIAL_YOU = "material_you_theme"
+        const val KEY_ACCENT_COLOR = "accent_color"
+        const val KEY_VIDEO_QUALITY = "video_quality_preference"
+        const val KEY_VIDEO_DOWNLOAD = "video_download_preference"
     }
 
     private lateinit var binding: ActivitySettingsBinding
@@ -49,8 +56,111 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Material You theme and configurable accent color.
+        binding.settingsMaterialYou.isChecked = prefs.getBoolean(KEY_MATERIAL_YOU, false)
+        val accentLabels = resources.getStringArray(R.array.settings_accent_color_labels).toList()
+        binding.settingsAccentColor.adapter = ArrayAdapter(
+            this, android.R.layout.simple_spinner_item, accentLabels
+        ).also { it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+        val savedAccent = prefs.getInt(KEY_ACCENT_COLOR, 0).coerceIn(0, accentLabels.lastIndex)
+        binding.settingsAccentColor.setSelection(savedAccent)
+        fun applyAccent(index: Int, materialYou: Boolean) {
+            val color = when (index) {
+                1 -> android.graphics.Color.parseColor("#FFFE2C55")
+                2 -> android.graphics.Color.parseColor("#FF4285F4")
+                3 -> android.graphics.Color.parseColor("#FF9C27B0")
+                4 -> android.graphics.Color.parseColor("#FF4CAF50")
+                5 -> android.graphics.Color.parseColor("#FFFF9800")
+                else -> if (materialYou && Build.VERSION.SDK_INT >= 31) {
+                    try { getColor(android.R.color.system_accent1_500) }
+                    catch (_: Exception) { getColor(R.color.fixtok_accent) }
+                } else getColor(R.color.fixtok_accent)
+            }
+            binding.settingsMaterialYou.buttonTintList = android.content.res.ColorStateList.valueOf(color)
+            binding.settingsAccentColor.backgroundTintList = android.content.res.ColorStateList.valueOf(color)
+            binding.settingsDone.backgroundTintList = android.content.res.ColorStateList.valueOf(color)
+            binding.settingsCursorPreview.invalidate()
+        }
+        applyAccent(savedAccent, binding.settingsMaterialYou.isChecked)
+        binding.settingsMaterialYou.setOnCheckedChangeListener { _, checked ->
+            prefs.edit().putBoolean(KEY_MATERIAL_YOU, checked).apply()
+            applyAccent(binding.settingsAccentColor.selectedItemPosition, checked)
+        }
+        binding.settingsAccentColor.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+                prefs.edit().putInt(KEY_ACCENT_COLOR, position).apply()
+                applyAccent(position, binding.settingsMaterialYou.isChecked)
+            }
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) = Unit
+        }
+
         window.statusBarColor = android.graphics.Color.BLACK
         window.navigationBarColor = android.graphics.Color.BLACK
+
+        // ── Guide mode ────────────────────────────────────────────────
+        val guideModes = resources.getStringArray(R.array.settings_guide_mode_labels).toList()
+        binding.settingsGuideMode.adapter = ArrayAdapter(
+            this, android.R.layout.simple_spinner_item, guideModes
+        ).also { it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+        binding.settingsGuideMode.setSelection(
+            prefs.getInt(KEY_GUIDE_MODE, 0).coerceIn(0, guideModes.lastIndex)
+        )
+        binding.settingsGuideMode.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+                prefs.edit().putInt(KEY_GUIDE_MODE, position).apply()
+            }
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) = Unit
+        }
+
+        binding.settingsAdvancedAudio.isChecked = prefs.getBoolean(KEY_ADVANCED_AUDIO, true)
+        binding.settingsAdvancedAudio.setOnCheckedChangeListener { _, checked ->
+            prefs.edit().putBoolean(KEY_ADVANCED_AUDIO, checked).apply()
+        }
+
+        binding.settingsCursorPrecision.isChecked = prefs.getBoolean(KEY_CURSOR_PRECISION, true)
+        binding.settingsCursorPrecision.setOnCheckedChangeListener { _, checked ->
+            prefs.edit().putBoolean(KEY_CURSOR_PRECISION, checked).apply()
+        }
+
+        // These are saved preferences. TikTok's website may ignore requested quality
+        // or download behavior when it does not expose a corresponding control.
+        val qualityLabels = resources.getStringArray(R.array.settings_video_quality_labels).toList()
+        binding.settingsVideoQuality.adapter = ArrayAdapter(
+            this, android.R.layout.simple_spinner_item, qualityLabels
+        ).also { it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+        binding.settingsVideoQuality.setSelection(
+            prefs.getInt(KEY_VIDEO_QUALITY, 0).coerceIn(0, qualityLabels.lastIndex)
+        )
+        binding.settingsVideoQuality.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+                prefs.edit().putInt(KEY_VIDEO_QUALITY, position).apply()
+            }
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) = Unit
+        }
+
+        val downloadLabels = resources.getStringArray(R.array.settings_video_download_labels).toList()
+        binding.settingsVideoDownload.adapter = ArrayAdapter(
+            this, android.R.layout.simple_spinner_item, downloadLabels
+        ).also { it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+        binding.settingsVideoDownload.setSelection(
+            prefs.getInt(KEY_VIDEO_DOWNLOAD, 0).coerceIn(0, downloadLabels.lastIndex)
+        )
+        binding.settingsVideoDownload.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+                prefs.edit().putInt(KEY_VIDEO_DOWNLOAD, position).apply()
+            }
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) = Unit
+        }
+
+        binding.settingsEmptyCache.setOnClickListener {
+            try {
+                WebView(this).apply { clearCache(true); destroy() }
+                android.webkit.WebStorage.getInstance().deleteAllData()
+                android.widget.Toast.makeText(this, R.string.settings_cache_cleared, android.widget.Toast.LENGTH_SHORT).show()
+            } catch (_: Exception) {
+                android.widget.Toast.makeText(this, R.string.settings_cache_clear_failed, android.widget.Toast.LENGTH_SHORT).show()
+            }
+        }
 
         // ── Bass boost ────────────────────────────────────────────────
 

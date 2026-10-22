@@ -141,4 +141,27 @@
     <string-array name="cursor_shape_labels">
         <item>Arrow</item><item>Paper plane</item><item>Dot</item><item>Drop</item>
     </string-array>
+
+    <string name="settings_section_guide">GUIDE / WEB VIEW</string>
+    <string name="settings_guide_mode">Guide mode</string>
+    <string name="settings_empty_cache">Empty cache</string>
+    <string name="settings_cache_cleared">WebView cache cleared</string>
+    <string name="settings_cache_clear_failed">Could not clear cache</string>
+    <string name="settings_advanced_audio">Advanced audio system</string>
+    <string name="settings_cursor_precision">Professional cursor precision mode</string>
+    <string-array name="settings_guide_mode_labels"><item>Android CSS</item><item>Wide Windows</item><item>None</item></string-array>
+    <string name="settings_material_you">Material You theme</string>
+    <string name="settings_accent_color">Accent color</string>
+    <string-array name="settings_accent_color_labels">
+        <item>Turkuaz</item><item>Pembe</item><item>Mavi</item><item>Mor</item><item>Yeşil</item><item>Turuncu</item><item>Material You (sistem)</item>
+    </string-array>
+    <string name="settings_section_video">VIDEO / DOWNLOAD</string>
+    <string name="settings_video_quality">Preferred playback quality</string>
+    <string name="settings_video_download">Video download preference</string>
+    <string-array name="settings_video_quality_labels">
+        <item>Auto (recommended)</item><item>720p HD</item><item>2K / 1440p</item><item>4K / 2160p</item>
+    </string-array>
+    <string-array name="settings_video_download_labels">
+        <item>Default (TikTok controls availability)</item><item>Prefer highest available quality</item><item>Data saver / smaller file</item><item>Downloads disabled (preference)</item>
+    </string-array>
 </resources>
