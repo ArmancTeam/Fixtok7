@@ -1,15 +1,16 @@
 name: Publish FixTok APK
 
-on:
+'on':
 push:
 tags:
-- 'v*'
+- "v*"
 
 permissions:
 contents: write
 
 jobs:
 release:
+name: Build and Publish APK
 runs-on: ubuntu-latest
 
 steps:
@@ -20,7 +21,7 @@ steps:
     uses: actions/setup-java@v4
     with:
       distribution: temurin
-      java-version: '17'
+      java-version: "17"
 
   - name: Set up Gradle
     uses: gradle/actions/setup-gradle@v4
@@ -41,14 +42,13 @@ steps:
 
       VERSION_CODE=$((MAJOR * 10000 + MINOR * 100 + PATCH))
 
-      echo "Building version: $VERSION_NAME"
+      echo "Version: $VERSION_NAME"
       echo "Version code: $VERSION_CODE"
 
       ./gradlew assembleDebug \
         -PVERSION_NAME="$VERSION_NAME" \
         -PVERSION_CODE="$VERSION_CODE" \
-        --stacktrace \
-        --warning-mode all
+        --stacktrace
 
   - name: Verify APK
     run: |
